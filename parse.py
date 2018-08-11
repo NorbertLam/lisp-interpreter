@@ -28,5 +28,27 @@ def evaluate(tokens):
         return exp1 // exp2
     elif curr.type == TokenType.INTEGER:
         return curr.value
-    else:
-        return 0
+    elif curr.type == TokenType.AND:
+        exp1 = evaluate(tokens)
+        exp2 = evaluate(tokens)
+
+        return exp1 and exp2
+    elif curr.type == TokenType.OR:
+        exp1 = evaluate(tokens)
+        exp2 = evaluate(tokens)
+
+        return exp1 or exp2
+    elif curr.type == TokenType.NOT:
+        return not evaluate(tokens)
+    elif curr.type == TokenType.EQ:
+        exp1 = evaluate(tokens)
+        exp2 = evaluate(tokens)
+
+        return exp1 == exp2
+    elif curr.type == TokenType.TRUE:
+        return True
+    elif curr.type == TokenType.FALSE:
+        return False
+    elif curr.type == TokenType.CLOSE:
+        tokens.pop()
+        return evaluate(tokens)

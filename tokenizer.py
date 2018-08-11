@@ -44,6 +44,24 @@ def tokenize(inpt):
             tokens.append(Token(TokenType.OPEN, None))
         elif inpt[i] == ')':
             tokens.append(Token(TokenType.CLOSE, None))
+        elif inpt[i] == 'n'and inpt[i + 1] == 'o' and inpt[i + 2] == 't':
+            tokens.append(Token(TokenType.NOT, None))
+            i += 2
+        elif inpt[i] == 'a' and inpt[i + 1] == 'n' and inpt[i + 2] == 'd':
+            tokens.append(Token(TokenType.AND, None))
+            i += 2
+        elif inpt[i] == 'o' and inpt[i + 1] == 'r':
+            tokens.append(Token(TokenType.OR, None))
+            i += 1
+        elif inpt[i] == 'e'and inpt[i + 1] == 'q':
+            tokens.append(Token(TokenType.EQ, None))
+            i += 2
+        elif inpt[i] == '#':
+            if inpt[i + 1] == 't':
+                tokens.append(Token(TokenType.TRUE, None))
+            elif inpt[i + 1] == 'f':
+                tokens.append(Token(TokenType.FALSE, None))
+            i += 1
         i += 1
 
     return tokens

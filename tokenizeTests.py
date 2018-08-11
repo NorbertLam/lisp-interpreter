@@ -36,6 +36,19 @@ class TestingTokenize(unittest.TestCase):
                     Token(TokenType.CLOSE, None)]
         self.assertListEqual(result, expected)
 
+    def test_tokenize_boolean(self):
+        result = tokenize("(not #f (or #f #t))")
+        expected = [Token(TokenType.OPEN, None),
+                    Token(TokenType.NOT, None),
+                    Token(TokenType.FALSE, None),
+                    Token(TokenType.OPEN, None),
+                    Token(TokenType.OR, None),
+                    Token(TokenType.FALSE, None),
+                    Token(TokenType.TRUE, None),
+                    Token(TokenType.CLOSE, None),
+                    Token(TokenType.CLOSE, None)]
+        self.assertEqual(result, expected)
+
 
 if __name__ == "__main__":
     unittest.main()
