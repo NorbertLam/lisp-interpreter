@@ -49,6 +49,15 @@ class TestingTokenize(unittest.TestCase):
                     Token(TokenType.CLOSE, None)]
         self.assertEqual(result, expected)
 
+    def test_tokenize_define(self):
+        result = tokenize("(define cat 5)")
+        expected = [Token(TokenType.OPEN, None),
+                    Token(TokenType.DEFINE, None),
+                    Token(TokenType.NAME, ('cat', 5)),
+                    Token(TokenType.INTEGER, 5),
+                    Token(TokenType.CLOSE, None)]
+        self.assertEqual(result, expected)
+
 
 if __name__ == "__main__":
     unittest.main()

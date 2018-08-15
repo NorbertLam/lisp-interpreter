@@ -15,3 +15,7 @@ class TokenType(Enum):
     EQ = "EQ"
     TRUE = "TRUE"
     FALSE = "FALSE"
+    DEFINE = "DEFINE"
+    NAME = "NAME"
+    PRINT = "PRINT"
+    ID = "ID"

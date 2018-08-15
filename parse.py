@@ -1,6 +1,9 @@
 from tokenType import TokenType
 
 
+alias = {}
+
+
 def evaluate(tokens):
     curr = tokens.pop()
 
@@ -49,6 +52,17 @@ def evaluate(tokens):
         return True
     elif curr.type == TokenType.FALSE:
         return False
+    elif curr.type == TokenType.DEFINE:
+        return evaluate(tokens)
+    elif curr.type == TokenType.NAME:
+        alias[curr.value[0]] = curr.value[1]
+
+        return alias[curr.value[0]]
+    elif curr.type == TokenType.PRINT:
+        exp = evaluate(tokens)
+        print(exp)
+    elif curr.type == TokenType.ID:
+        return curr.value
     elif curr.type == TokenType.CLOSE:
         tokens.pop()
         return evaluate(tokens)

@@ -1,4 +1,5 @@
 from tokenType import TokenType
+from parse import evaluate, alias
 
 
 class Token(object):
@@ -21,47 +22,79 @@ def tokenize(inpt):
     i = 0
 
     while i < len(inpt):
-        if inpt[i].isdigit():
-            num = ""
+        if tokens and tokens[-1].type == TokenType.DEFINE:
+            i += 1
+            name = ""
 
-            while inpt[i].isdigit():
-                num += str(inpt[i])
+            while inpt[i].isalpha():
+                name += inpt[i]
                 i += 1
 
-            if not inpt[i].isdigit():
+            if not inpt[i].isalpha():
                 i -= 1
+            value = evaluate(tokenize(inpt[i:])[::-1])
+            tokens.append(Token(TokenType.NAME, (name, value)))
 
-            tokens.append(Token(TokenType.INTEGER, int(num)))
-        elif inpt[i] == '+':
-            tokens.append(Token(TokenType.PLUS, None))
-        elif inpt[i] == '-':
-            tokens.append(Token(TokenType.MINUS, None))
-        elif inpt[i] == '*':
-            tokens.append(Token(TokenType.MULTIPLY, None))
-        elif inpt[i] == '/':
-            tokens.append(Token(TokenType.DIVIDE, None))
-        elif inpt[i] == '(':
-            tokens.append(Token(TokenType.OPEN, None))
-        elif inpt[i] == ')':
-            tokens.append(Token(TokenType.CLOSE, None))
-        elif inpt[i] == 'n'and inpt[i + 1] == 'o' and inpt[i + 2] == 't':
-            tokens.append(Token(TokenType.NOT, None))
-            i += 2
-        elif inpt[i] == 'a' and inpt[i + 1] == 'n' and inpt[i + 2] == 'd':
-            tokens.append(Token(TokenType.AND, None))
-            i += 2
-        elif inpt[i] == 'o' and inpt[i + 1] == 'r':
-            tokens.append(Token(TokenType.OR, None))
+        else:
+            if inpt[i].isdigit():
+                num = ""
+
+                while inpt[i].isdigit():
+                    num += str(inpt[i])
+                    i += 1
+
+                if not inpt[i].isdigit():
+                    i -= 1
+
+                tokens.append(Token(TokenType.INTEGER, int(num)))
+            elif inpt[i] == '+':
+                tokens.append(Token(TokenType.PLUS, None))
+            elif inpt[i] == '-':
+                tokens.append(Token(TokenType.MINUS, None))
+            elif inpt[i] == '*':
+                tokens.append(Token(TokenType.MULTIPLY, None))
+            elif inpt[i] == '/':
+                tokens.append(Token(TokenType.DIVIDE, None))
+            elif inpt[i] == '(':
+                tokens.append(Token(TokenType.OPEN, None))
+            elif inpt[i] == ')':
+                tokens.append(Token(TokenType.CLOSE, None))
+            elif inpt[i] == 'n'and inpt[i + 1] == 'o' and inpt[i + 2] == 't':
+                tokens.append(Token(TokenType.NOT, None))
+                i += 2
+            elif inpt[i] == 'a' and inpt[i + 1] == 'n' and inpt[i + 2] == 'd':
+                tokens.append(Token(TokenType.AND, None))
+                i += 2
+            elif inpt[i] == 'o' and inpt[i + 1] == 'r':
+                tokens.append(Token(TokenType.OR, None))
+                i += 1
+            elif inpt[i] == 'e'and inpt[i + 1] == 'q':
+                tokens.append(Token(TokenType.EQ, None))
+                i += 1
+            elif inpt[i] == '#':
+                if inpt[i + 1] == 't':
+                    tokens.append(Token(TokenType.TRUE, None))
+                elif inpt[i + 1] == 'f':
+                    tokens.append(Token(TokenType.FALSE, None))
+                i += 1
+            elif inpt[i] == 'd' and "define" in ''.join(inpt[i:i+6]):
+                tokens.append(Token(TokenType.DEFINE, None))
+                i += 5
+            elif inpt[i] == 'p' and 'print' in ''.join(inpt[i:i+5]):
+                tokens.append(Token(TokenType.PRINT, None))
+                i += 4
+            elif inpt[i].isalpha():
+                identity = ""
+
+                while inpt[i].isalpha():
+                    identity += str(inpt[i])
+                    i += 1
+
+                if not inpt[i].isdigit():
+                    i -= 1
+
+                if identity in alias:
+                    tokens.append(Token(TokenType.ID, alias[identity]))
             i += 1
-        elif inpt[i] == 'e'and inpt[i + 1] == 'q':
-            tokens.append(Token(TokenType.EQ, None))
-            i += 2
-        elif inpt[i] == '#':
-            if inpt[i + 1] == 't':
-                tokens.append(Token(TokenType.TRUE, None))
-            elif inpt[i + 1] == 'f':
-                tokens.append(Token(TokenType.FALSE, None))
-            i += 1
-        i += 1
 
     return tokens
