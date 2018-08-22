@@ -19,3 +19,7 @@ class TokenType(Enum):
     NAME = "NAME"
     PRINT = "PRINT"
     ID = "ID"
+    COND = "COND"
+    LEFT = "LEFT"
+    RIGHT = "RIGHT"
+    ELSE = "ELSE"

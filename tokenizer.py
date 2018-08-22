@@ -20,6 +20,7 @@ class Token(object):
 def tokenize(inpt):
     tokens = []
     i = 0
+    pairing = {}
 
     while i < len(inpt):
         if tokens and tokens[-1].type == TokenType.DEFINE:
@@ -32,9 +33,10 @@ def tokenize(inpt):
 
             if not inpt[i].isalpha():
                 i -= 1
-            value = evaluate(tokenize(inpt[i:])[::-1])
+            value = evaluate(tokenize("(" + inpt[i:]))
+            pairing[name] = value
+            alias[name] = value
             tokens.append(Token(TokenType.NAME, (name, value)))
-
         else:
             if inpt[i].isdigit():
                 num = ""
@@ -45,8 +47,8 @@ def tokenize(inpt):
 
                 if not inpt[i].isdigit():
                     i -= 1
-
-                tokens.append(Token(TokenType.INTEGER, int(num)))
+                if tokens[-1].type != TokenType.NAME:
+                    tokens.append(Token(TokenType.INTEGER, int(num)))
             elif inpt[i] == '+':
                 tokens.append(Token(TokenType.PLUS, None))
             elif inpt[i] == '-':
@@ -68,9 +70,9 @@ def tokenize(inpt):
             elif inpt[i] == 'o' and inpt[i + 1] == 'r':
                 tokens.append(Token(TokenType.OR, None))
                 i += 1
-            elif inpt[i] == 'e'and inpt[i + 1] == 'q':
+            elif inpt[i] == 'e'and inpt[i + 1] == 'q' and inpt[i + 2] == '?':
                 tokens.append(Token(TokenType.EQ, None))
-                i += 1
+                i += 2
             elif inpt[i] == '#':
                 if inpt[i + 1] == 't':
                     tokens.append(Token(TokenType.TRUE, None))
@@ -83,6 +85,16 @@ def tokenize(inpt):
             elif inpt[i] == 'p' and 'print' in ''.join(inpt[i:i+5]):
                 tokens.append(Token(TokenType.PRINT, None))
                 i += 4
+            elif inpt[i] == 'c' and 'cond' in ''.join(inpt[i:i+4]):
+                tokens.append(Token(TokenType.COND, None))
+                i += 3
+            elif inpt[i] == 'e' and 'else' in ''.join(inpt[i:i+4]):
+                tokens.append(Token(TokenType.ELSE, None))
+                i += 3
+            elif inpt[i] == '[':
+                tokens.append(Token(TokenType.LEFT, None))
+            elif inpt[i] == ']':
+                tokens.append(Token(TokenType.RIGHT, None))
             elif inpt[i].isalpha():
                 identity = ""
 
@@ -93,8 +105,11 @@ def tokenize(inpt):
                 if not inpt[i].isdigit():
                     i -= 1
 
-                if identity in alias:
-                    tokens.append(Token(TokenType.ID, alias[identity]))
+                if identity in pairing:
+                    tokens.append(Token(TokenType.ID, pairing[identity]))
+                else:
+                    if identity in alias:
+                        tokens.append(Token(TokenType.ID, alias[identity]))
             i += 1
 
     return tokens

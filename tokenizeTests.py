@@ -54,7 +54,6 @@ class TestingTokenize(unittest.TestCase):
         expected = [Token(TokenType.OPEN, None),
                     Token(TokenType.DEFINE, None),
                     Token(TokenType.NAME, ('cat', 5)),
-                    Token(TokenType.INTEGER, 5),
                     Token(TokenType.CLOSE, None)]
         self.assertEqual(result, expected)
 
