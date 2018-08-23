@@ -8,7 +8,7 @@ def evaluate(tokens):
     if tokens:
         curr = tokens.pop(0)
 
-        if curr.type == TokenType.OPEN:
+        if curr.type == TokenType.LPAREN:
             return evaluate(tokens)
         elif curr.type == TokenType.PLUS:
             exp1 = evaluate(tokens)
@@ -65,31 +65,31 @@ def evaluate(tokens):
         elif curr.type == TokenType.ID:
             return curr.value
         elif curr.type == TokenType.COND:
-            return eval_sub_exp(tokens)
+            return evaluate_cond_cases(tokens)
         elif curr.type == TokenType.ELSE:
             return evaluate(tokens)
-        elif curr.type == TokenType.LEFT:
+        elif curr.type == TokenType.LCOND:
             return evaluate(tokens)
-        elif curr.type == TokenType.RIGHT:
+        elif curr.type == TokenType.RCOND:
             return
-        elif curr.type == TokenType.CLOSE:
+        elif curr.type == TokenType.RPAREN:
             return evaluate(tokens)
 
 
-def eval_sub_exp(tokens):
+def evaluate_cond_cases(tokens):
     exp1 = []
     tokens.pop(0)
 
     if tokens[0].type == TokenType.ELSE:
         return evaluate(tokens)
 
-    while tokens[0].type != TokenType.CLOSE:
+    while tokens[0].type != TokenType.RPAREN:
         exp1.append(tokens.pop(0))
     exp1.append(tokens.pop(0))
 
     if evaluate(exp1):
         return evaluate(tokens)
     else:
-        while tokens[0].type != TokenType.LEFT:
+        while tokens[0].type != TokenType.LCOND:
             tokens.pop(0)
-        return eval_sub_exp(tokens)
+        return evaluate_cond_cases(tokens)

@@ -58,9 +58,9 @@ def tokenize(inpt):
             elif inpt[i] == '/':
                 tokens.append(Token(TokenType.DIVIDE, None))
             elif inpt[i] == '(':
-                tokens.append(Token(TokenType.OPEN, None))
+                tokens.append(Token(TokenType.LPAREN, None))
             elif inpt[i] == ')':
-                tokens.append(Token(TokenType.CLOSE, None))
+                tokens.append(Token(TokenType.RPAREN, None))
             elif inpt[i] == 'n'and inpt[i + 1] == 'o' and inpt[i + 2] == 't':
                 tokens.append(Token(TokenType.NOT, None))
                 i += 2
@@ -92,9 +92,9 @@ def tokenize(inpt):
                 tokens.append(Token(TokenType.ELSE, None))
                 i += 3
             elif inpt[i] == '[':
-                tokens.append(Token(TokenType.LEFT, None))
+                tokens.append(Token(TokenType.LCOND, None))
             elif inpt[i] == ']':
-                tokens.append(Token(TokenType.RIGHT, None))
+                tokens.append(Token(TokenType.RCOND, None))
             elif inpt[i].isalpha():
                 identity = ""
 

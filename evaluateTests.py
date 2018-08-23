@@ -3,7 +3,7 @@ from tokenizer import tokenize
 from parse import evaluate
 
 
-class TestingEvaluate(unittest.TestCase):
+class TestEvaluate(unittest.TestCase):
 
     def test_evaluate_add_01(self):
         result = evaluate(tokenize("(+ 5 2)"))

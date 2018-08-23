@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class TokenType(Enum):
-    OPEN = "OPEN"
-    CLOSE = "CLOSE"
+    LPAREN = "LPAREN"
+    RPAREN = "RPAREN"
     INTEGER = "INTEGER"
     PLUS = "PLUS"
     MINUS = "MINUS"
@@ -20,6 +20,6 @@ class TokenType(Enum):
     PRINT = "PRINT"
     ID = "ID"
     COND = "COND"
-    LEFT = "LEFT"
-    RIGHT = "RIGHT"
+    LCOND = "LCOND"
+    RCOND = "RCOND"
     ELSE = "ELSE"
