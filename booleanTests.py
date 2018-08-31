@@ -1,6 +1,6 @@
 import unittest
 from tokenizer import tokenize
-from parse import evaluate
+from evalTokens import evaluate
 
 
 class TestBoolean(unittest.TestCase):

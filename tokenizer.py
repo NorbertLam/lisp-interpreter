@@ -1,5 +1,5 @@
 from tokenType import TokenType
-from parse import evaluate, alias
+from evalTokens import evaluate, alias
 
 
 class Token(object):
@@ -33,7 +33,18 @@ def tokenize(inpt):
 
             if not inpt[i].isalpha():
                 i -= 1
-            value = evaluate(tokenize("(" + inpt[i:]))
+            i += 2
+
+            k = 0
+            if inpt[i] == '(':
+                while inpt[i + k] != ')':
+                    k += 1
+                value = evaluate(tokenize(inpt[i:i + k + 1]))
+                inpt = inpt[i + k + 1:]
+                i = 0
+            else:
+                value = evaluate(tokenize("(" + inpt[i:]))
+
             pairing[name] = value
             alias[name] = value
             tokens.append(Token(TokenType.NAME, (name, value)))
