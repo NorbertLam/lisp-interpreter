@@ -1,5 +1,7 @@
 from tokenType import TokenType
-from evalTokens import evaluate, alias
+from evalTokens import evaluate
+
+pairing = {}
 
 
 class Token(object):
@@ -20,7 +22,6 @@ class Token(object):
 def tokenize(inpt):
     tokens = []
     i = 0
-    pairing = {}
 
     while i < len(inpt):
         if tokens and tokens[-1].type == TokenType.DEFINE:
@@ -43,11 +44,12 @@ def tokenize(inpt):
                 inpt = inpt[i + k + 1:]
                 i = 0
             else:
-                value = evaluate(tokenize("(" + inpt[i:]))
+                equa = tokenize("(" + inpt[i:])
+                value = evaluate(equa)
 
-            pairing[name] = value
-            alias[name] = value
-            tokens.append(Token(TokenType.NAME, (name, value)))
+            token = Token(TokenType.NAME, (name, value))
+            pairing[name] = token
+            tokens.append(token)
         else:
             if inpt[i].isdigit():
                 num = ""
@@ -58,7 +60,6 @@ def tokenize(inpt):
 
                 if not inpt[i].isdigit():
                     i -= 1
-                if tokens[-1].type != TokenType.NAME:
                     tokens.append(Token(TokenType.INTEGER, int(num)))
             elif inpt[i] == '+':
                 tokens.append(Token(TokenType.PLUS, None))
@@ -86,9 +87,9 @@ def tokenize(inpt):
                 i += 2
             elif inpt[i] == '#':
                 if inpt[i + 1] == 't':
-                    tokens.append(Token(TokenType.TRUE, None))
+                    tokens.append(Token(TokenType.TRUE, True))
                 elif inpt[i + 1] == 'f':
-                    tokens.append(Token(TokenType.FALSE, None))
+                    tokens.append(Token(TokenType.FALSE, False))
                 i += 1
             elif inpt[i] == 'd' and "define" in ''.join(inpt[i:i+6]):
                 tokens.append(Token(TokenType.DEFINE, None))
@@ -117,10 +118,7 @@ def tokenize(inpt):
                     i -= 1
 
                 if identity in pairing:
-                    tokens.append(Token(TokenType.ID, pairing[identity]))
-                else:
-                    if identity in alias:
-                        tokens.append(Token(TokenType.ID, alias[identity]))
+                    tokens.append(pairing[identity])
             i += 1
 
     return tokens

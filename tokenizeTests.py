@@ -40,11 +40,11 @@ class TestTokenize(unittest.TestCase):
         result = tokenize("(not #f (or #f #t))")
         expected = [Token(TokenType.LPAREN, None),
                     Token(TokenType.NOT, None),
-                    Token(TokenType.FALSE, None),
+                    Token(TokenType.FALSE, False),
                     Token(TokenType.LPAREN, None),
                     Token(TokenType.OR, None),
-                    Token(TokenType.FALSE, None),
-                    Token(TokenType.TRUE, None),
+                    Token(TokenType.FALSE, False),
+                    Token(TokenType.TRUE, True),
                     Token(TokenType.RPAREN, None),
                     Token(TokenType.RPAREN, None)]
         self.assertEqual(result, expected)
@@ -54,6 +54,7 @@ class TestTokenize(unittest.TestCase):
         expected = [Token(TokenType.LPAREN, None),
                     Token(TokenType.DEFINE, None),
                     Token(TokenType.NAME, ('cat', 5)),
+                    Token(TokenType.INTEGER, 5),
                     Token(TokenType.RPAREN, None)]
         self.assertEqual(result, expected)
 

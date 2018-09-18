@@ -18,7 +18,6 @@ class TokenType(Enum):
     DEFINE = "DEFINE"
     NAME = "NAME"
     PRINT = "PRINT"
-    ID = "ID"
     COND = "COND"
     LCOND = "LCOND"
     RCOND = "RCOND"

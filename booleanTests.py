@@ -1,43 +1,43 @@
 import unittest
 from tokenizer import tokenize
-from evalTokens import evaluate
+from evalTokens import evaluateTokens
 
 
 class TestBoolean(unittest.TestCase):
 
     def test_boolean_not_true(self):
-        result = evaluate(tokenize("(not #t)"))
+        result = evaluateTokens(tokenize("(not #t)"))
         expected = False
         self.assertEqual(result, expected)
 
     def test_boolean_not_false(self):
-        result = evaluate(tokenize("(not #f)"))
+        result = evaluateTokens(tokenize("(not #f)"))
         expected = True
         self.assertEqual(result, expected)
 
     def test_boolean_or_ff(self):
-        result = evaluate(tokenize("(or #f #f)"))
+        result = evaluateTokens(tokenize("(or #f #f)"))
         expected = False
         self.assertEqual(result, expected)
 
     def test_boolean_or_tf(self):
-        result = evaluate(tokenize("(or #t #f)"))
+        result = evaluateTokens(tokenize("(or #t #f)"))
         expected = True
         self.assertEqual(result, expected)
 
     def test_boolean_and_tf(self):
-        result = evaluate(tokenize("(and #t #f)"))
+        result = evaluateTokens(tokenize("(and #t #f)"))
         expected = False
         self.assertEqual(result, expected)
 
     def test_boolean_eq(self):
-        result = evaluate(tokenize("(eq? #f #f)"))
+        result = evaluateTokens(tokenize("(eq? #f #f)"))
         expected = True
         self.assertEqual(result, expected)
 
     def test_boolean_nested_or(self):
-        result = evaluate(tokenize("(or #f (not #t))"))
-        expected = False
+        result = evaluateTokens(tokenize("(or #t (not #f))"))
+        expected = True
         self.assertEqual(result, expected)
 
 
