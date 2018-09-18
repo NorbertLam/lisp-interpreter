@@ -1,6 +1,5 @@
 from tokenType import TokenType
 
-
 alias = {}
 
 

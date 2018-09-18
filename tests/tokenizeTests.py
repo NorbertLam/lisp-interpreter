@@ -1,4 +1,7 @@
 import unittest
+import sys
+import os
+sys.path.append(os.path.abspath('../src'))
 from tokenType import TokenType
 from tokenizer import Token, tokenize
 
