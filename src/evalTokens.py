@@ -1,19 +1,19 @@
 from tokenType import TokenType
 
 
-def evaluateTokens(tokens):
+def evaluate_tokens(tokens):
     while tokens:
-        output = evaluate(tokens)
+        output = evaluate_expression(tokens)
 
     return output
 
 
-def evaluate(tokens):
+def evaluate_expression(tokens):
     while tokens:
         curr = tokens.pop(0)
 
         if curr.type == TokenType.LPAREN:
-            expr = parseExpr(tokens)
+            expr = parse_expr(tokens)
         elif curr.type == TokenType.INTEGER:
             return curr.value
         elif curr.type == TokenType.NAME:
@@ -36,58 +36,58 @@ def evaluate(tokens):
             return
 
 
-def parseExpr(tokens):
+def parse_expr(tokens):
     if tokens:
         curr = tokens.pop(0)
 
         if curr.type == TokenType.PLUS:
-            exp1 = evaluate(tokens)
-            exp2 = evaluate(tokens)
+            exp1 = evaluate_expression(tokens)
+            exp2 = evaluate_expression(tokens)
 
             return exp1 + exp2
         elif curr.type == TokenType.MINUS:
-            exp1 = evaluate(tokens)
-            exp2 = evaluate(tokens)
+            exp1 = evaluate_expression(tokens)
+            exp2 = evaluate_expression(tokens)
 
             return exp1 - exp2
         elif curr.type == TokenType.MULTIPLY:
-            exp1 = evaluate(tokens)
-            exp2 = evaluate(tokens)
+            exp1 = evaluate_expression(tokens)
+            exp2 = evaluate_expression(tokens)
 
             return exp1 * exp2
         elif curr.type == TokenType.DIVIDE:
-            exp1 = evaluate(tokens)
-            exp2 = evaluate(tokens)
+            exp1 = evaluate_expression(tokens)
+            exp2 = evaluate_expression(tokens)
 
             return exp1 // exp2
         elif curr.type == TokenType.INTEGER:
             return curr.value
         elif curr.type == TokenType.AND:
-            exp1 = parseExpr(tokens)
-            exp2 = parseExpr(tokens)
+            exp1 = parse_expr(tokens)
+            exp2 = parse_expr(tokens)
 
             return exp1 and exp2
         elif curr.type == TokenType.OR:
-            exp1 = evaluate(tokens)
-            exp2 = evaluate(tokens)
+            exp1 = evaluate_expression(tokens)
+            exp2 = evaluate_expression(tokens)
 
             return exp1 or exp2
         elif curr.type == TokenType.NOT:
-            return not evaluate(tokens)
+            return not evaluate_expression(tokens)
         elif curr.type == TokenType.EQ:
-            exp1 = evaluate(tokens)
-            exp2 = evaluate(tokens)
+            exp1 = evaluate_expression(tokens)
+            exp2 = evaluate_expression(tokens)
 
             return exp1 == exp2
         elif curr.type == TokenType.TRUE or curr.type == TokenType.FALSE:
             return curr.value
         elif curr.type == TokenType.PRINT:
-            exp = parseExpr(tokens)
+            exp = parse_expr(tokens)
             print(exp)
         elif curr.type == TokenType.COND:
             return evaluate_cond_cases(tokens)
 
-        return parseExpr(tokens)
+        return parse_expr(tokens)
 
 
 def evaluate_cond_cases(tokens):
@@ -100,11 +100,11 @@ def evaluate_cond_cases(tokens):
             exp.append(tokens.pop(0))
         tokens.pop(0)
 
-        return parseExpr(exp)
+        return parse_expr(exp)
 
-    evaluation = evaluate(tokens)
+    evaluation = evaluate_expression(tokens)
     if evaluation:
-        output = evaluate(tokens)
+        output = evaluate_expression(tokens)
         del tokens[:-1]
 
         return output

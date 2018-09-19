@@ -1,5 +1,5 @@
 from tokenType import TokenType
-from evalTokens import evaluate
+from evalTokens import evaluate_expression
 
 pairing = {}
 
@@ -40,12 +40,12 @@ def tokenize(inpt):
             if inpt[i] == '(':
                 while inpt[i + k] != ')':
                     k += 1
-                value = evaluate(tokenize(inpt[i:i + k + 1]))
+                value = evaluate_expression(tokenize(inpt[i:i + k + 1]))
                 inpt = inpt[i + k + 1:]
                 i = 0
             else:
                 equa = tokenize("(" + inpt[i:])
-                value = evaluate(equa)
+                value = evaluate_expression(equa)
 
             token = Token(TokenType.NAME, (name, value))
             pairing[name] = token
