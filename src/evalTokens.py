@@ -1,7 +1,5 @@
 from tokenType import TokenType
 
-alias = {}
-
 
 def evaluateTokens(tokens):
     while tokens:
@@ -83,15 +81,6 @@ def parseExpr(tokens):
             return exp1 == exp2
         elif curr.type == TokenType.TRUE or curr.type == TokenType.FALSE:
             return curr.value
-        elif curr.type == TokenType.DEFINE:
-            token = tokens.pop(0)
-
-            if token.type == TokenType.NAME:
-                alias[token.value[0]] = token.value[1]
-            else:
-                print("expected is not alias token")
-
-            return
         elif curr.type == TokenType.PRINT:
             exp = parseExpr(tokens)
             print(exp)
