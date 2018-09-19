@@ -2,8 +2,8 @@ import unittest
 import sys
 import os
 sys.path.append(os.path.abspath('../src'))
-from tokenizer import tokenize
-from evalTokens import evaluateTokens
+from tokenizer import tokenize  # noqa
+from evalTokens import evaluateTokens  # noqa
 
 
 class TestBoolean(unittest.TestCase):
