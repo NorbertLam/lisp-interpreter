@@ -113,9 +113,9 @@ def evaluate_cond_cases(tokens):
 
         return parseExpr(exp)
 
-    evaluation = evaluate(getExpr(tokens))
+    evaluation = evaluate(tokens)
     if evaluation:
-        output = evaluate(getExpr(tokens))
+        output = evaluate(tokens)
         del tokens[:-1]
 
         return output
@@ -124,13 +124,3 @@ def evaluate_cond_cases(tokens):
             tokens.pop(0)
 
         return evaluate_cond_cases(tokens)
-
-
-def getExpr(tokens):
-    exp = []
-
-    while tokens[0].type != TokenType.RPAREN:
-        exp.append(tokens.pop(0))
-    exp.append(tokens.pop(0))
-
-    return exp
