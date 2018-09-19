@@ -97,12 +97,6 @@ def parseExpr(tokens):
             print(exp)
         elif curr.type == TokenType.COND:
             return evaluate_cond_cases(tokens)
-        elif curr.type == TokenType.ELSE:
-            return parseExpr(tokens)
-        elif curr.type == TokenType.LCOND:
-            return evaluate(tokens)
-        elif curr.type == TokenType.RCOND:
-            return evaluate(tokens)
 
         return parseExpr(tokens)
 
