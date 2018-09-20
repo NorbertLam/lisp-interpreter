@@ -14,6 +14,17 @@ def evaluate_expression(tokens):
 
         if curr.type == TokenType.LPAREN:
             expr = parse_expr(tokens)
+
+            if tokens[0].type == TokenType.INTEGER:
+                tokens.pop(0)
+
+            nxt = tokens.pop(0)
+
+            if nxt.type == TokenType.RPAREN:
+                return expr
+            else:
+                print("RPAREN Error")
+                return
         elif curr.type == TokenType.INTEGER:
             return curr.value
         elif curr.type == TokenType.NAME:
@@ -22,17 +33,6 @@ def evaluate_expression(tokens):
             return curr.value
         else:
             print("LPAREN Error")
-            return
-
-        if tokens[0].type == TokenType.INTEGER:
-            tokens.pop(0)
-
-        nxt = tokens.pop(0)
-
-        if nxt.type == TokenType.RPAREN:
-            return expr
-        else:
-            print("RPAREN Error")
             return
 
 
@@ -84,6 +84,8 @@ def parse_expr(tokens):
         elif curr.type == TokenType.PRINT:
             exp = parse_expr(tokens)
             print(exp)
+
+            return parse_expr(tokens)
         elif curr.type == TokenType.COND:
             return evaluate_cond_cases(tokens)
 
