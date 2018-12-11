@@ -1,6 +1,9 @@
 from tokenType import TokenType
 
 
+name_value = {}
+
+
 def evaluate_tokens(tokens):
     while tokens:
         output = evaluate_expression(tokens)
@@ -28,7 +31,7 @@ def evaluate_expression(tokens):
         elif curr.type == TokenType.INTEGER:
             return curr.value
         elif curr.type == TokenType.NAME:
-            return curr.value[1]
+            return name_value[curr.value]
         elif curr.type == TokenType.TRUE or TokenType.FALSE:
             return curr.value
         else:
@@ -62,6 +65,21 @@ def parse_expr(tokens):
             return exp1 // exp2
         elif curr.type == TokenType.INTEGER:
             return curr.value
+        elif curr.type == TokenType.DEFINE:
+            name = tokens.pop(0)
+            value = []
+            lparen_count, rparen_count = 1, 0
+
+            while lparen_count != rparen_count:
+                if tokens[0].type == TokenType.LPAREN:
+                    lparen_count += 1
+                elif tokens[0].type == TokenType.RPAREN:
+                    rparen_count += 1
+                value.append(tokens.pop(0))
+            '''for v in value:
+                print(v.type, v.value)'''
+            name_value[name.value] = evaluate_expression(value)
+
         elif curr.type == TokenType.AND:
             exp1 = parse_expr(tokens)
             exp2 = parse_expr(tokens)
