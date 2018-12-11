@@ -1,7 +1,5 @@
 from tokenType import TokenType
-from evalTokens import evaluate_expression
-
-pairing = {}
+from collections import deque
 
 
 class Token(object):
@@ -19,106 +17,84 @@ class Token(object):
                and self.value == other.value
 
 
-def tokenize(inpt):
-    tokens = []
-    i = 0
+def custom_split(string):
+    deq = deque(string)
+    symbols = set(['(', ')', '[', ']', '?', '+', '-', '*', '/'])
+    split_output = []
 
-    while i < len(inpt):
-        if tokens and tokens[-1].type == TokenType.DEFINE:
-            i += 1
-            name = ""
-
-            while inpt[i].isalpha():
-                name += inpt[i]
-                i += 1
-
-            if not inpt[i].isalpha():
-                i -= 1
-            i += 2
-
-            k = 0
-            if inpt[i] == '(':
-                while inpt[i + k] != ')':
-                    k += 1
-                value = evaluate_expression(tokenize(inpt[i:i + k + 1]))
-                inpt = inpt[i + k + 1:]
-                i = 0
-            else:
-                equa = tokenize("(" + inpt[i:])
-                value = evaluate_expression(equa)
-
-            token = Token(TokenType.NAME, (name, value))
-            pairing[name] = token
-            tokens.append(token)
+    while deq:
+        if deq[0] in symbols:
+            split_output.append(deq.popleft())
+        elif deq[0] == ' ':
+            deq.popleft()
         else:
-            if inpt[i].isdigit():
-                num = ""
+            split = ""
 
-                while inpt[i].isdigit():
-                    num += str(inpt[i])
-                    i += 1
+            if deq[0].isdigit():
+                while deq[0].isdigit():
+                    split += deq.popleft()
+                if split:
+                    split_output.append(split)
+            elif deq[0] == '#':
+                split_output.append(deq.popleft() + deq.popleft())
+            else:
+                while deq[0].isalpha():
+                    split += deq.popleft()
+                if split:
+                    split_output.append(split)
 
-                if not inpt[i].isdigit():
-                    i -= 1
-                    tokens.append(Token(TokenType.INTEGER, int(num)))
-            elif inpt[i] == '+':
-                tokens.append(Token(TokenType.PLUS, None))
-            elif inpt[i] == '-':
-                tokens.append(Token(TokenType.MINUS, None))
-            elif inpt[i] == '*':
-                tokens.append(Token(TokenType.MULTIPLY, None))
-            elif inpt[i] == '/':
-                tokens.append(Token(TokenType.DIVIDE, None))
-            elif inpt[i] == '(':
-                tokens.append(Token(TokenType.LPAREN, None))
-            elif inpt[i] == ')':
-                tokens.append(Token(TokenType.RPAREN, None))
-            elif inpt[i] == 'n'and inpt[i + 1] == 'o' and inpt[i + 2] == 't':
-                tokens.append(Token(TokenType.NOT, None))
-                i += 2
-            elif inpt[i] == 'a' and inpt[i + 1] == 'n' and inpt[i + 2] == 'd':
-                tokens.append(Token(TokenType.AND, None))
-                i += 2
-            elif inpt[i] == 'o' and inpt[i + 1] == 'r':
-                tokens.append(Token(TokenType.OR, None))
-                i += 1
-            elif inpt[i] == 'e'and inpt[i + 1] == 'q' and inpt[i + 2] == '?':
-                tokens.append(Token(TokenType.EQ, None))
-                i += 2
-            elif inpt[i] == '#':
-                if inpt[i + 1] == 't':
-                    tokens.append(Token(TokenType.TRUE, True))
-                elif inpt[i + 1] == 'f':
-                    tokens.append(Token(TokenType.FALSE, False))
-                i += 1
-            elif inpt[i] == 'd' and "define" in ''.join(inpt[i:i+6]):
-                tokens.append(Token(TokenType.DEFINE, None))
-                i += 5
-            elif inpt[i] == 'p' and 'print' in ''.join(inpt[i:i+5]):
-                tokens.append(Token(TokenType.PRINT, None))
-                i += 4
-            elif inpt[i] == 'c' and 'cond' in ''.join(inpt[i:i+4]):
-                tokens.append(Token(TokenType.COND, None))
-                i += 3
-            elif inpt[i] == 'e' and 'else' in ''.join(inpt[i:i+4]):
-                tokens.append(Token(TokenType.ELSE, None))
-                i += 3
-            elif inpt[i] == '[':
-                tokens.append(Token(TokenType.LCOND, None))
-            elif inpt[i] == ']':
-                tokens.append(Token(TokenType.RCOND, None))
-            elif inpt[i].isalpha():
-                identity = ""
+    return deque(split_output)
 
-                while inpt[i].isalpha():
-                    identity += str(inpt[i])
-                    i += 1
 
-                if not inpt[i].isdigit():
-                    i -= 1
+def tokenize_split(split):
+    tokens = []
 
-                if identity in pairing:
-                    tokens.append(pairing[identity])
-            i += 1
+    while split:
+        if split[0] == '+':
+            tokens.append(Token(TokenType.PLUS, None))
+        elif split[0] == '-':
+            tokens.append(Token(TokenType.MINUS, None))
+        elif split[0] == '*':
+            tokens.append(Token(TokenType.MULTIPLY, None))
+        elif split[0] == '/':
+            tokens.append(Token(TokenType.DIVIDE, None))
+        elif split[0] == '(':
+            tokens.append(Token(TokenType.LPAREN, None))
+        elif split[0] == ')':
+            tokens.append(Token(TokenType.RPAREN, None))
+        elif split[0].lower() == "not":
+            tokens.append(Token(TokenType.NOT, None))
+        elif split[0].lower() == "and":
+            tokens.append(Token(TokenType.AND, None))
+        elif split[0].lower() == "or":
+            tokens.append(Token(TokenType.OR, None))
+        elif split[0].lower() == "eq?":
+            tokens.append(Token(TokenType.EQ, None))
+        elif split[0].lower() == '#t':
+            tokens.append(Token(TokenType.TRUE, True))
+        elif split[0].lower() == '#f':
+            tokens.append(Token(TokenType.FALSE, False))
+        elif split[0].lower() == "define":
+            tokens.append(Token(TokenType.DEFINE, None))
+        elif split[0].lower() == "print":
+            tokens.append(Token(TokenType.PRINT, None))
+        elif split[0].lower() == "cond":
+            tokens.append(Token(TokenType.COND, None))
+        elif split[0].lower() == "else":
+            tokens.append(Token(TokenType.ELSE, None))
+        elif split[0] == '[':
+            tokens.append(Token(TokenType.LCOND, None))
+        elif split[0] == ']':
+            tokens.append(Token(TokenType.RCOND, None))
+        elif split[0].isdigit():
+            tokens.append(Token(TokenType.INTEGER, int(split[0])))
+        elif split[0].isalpha():
+            tokens.append(Token(TokenType.NAME, split[0]))
+
+        split.popleft()
 
     return tokens
+
+
+def tokenize(inpt):
+    return tokenize_split(custom_split(inpt))
