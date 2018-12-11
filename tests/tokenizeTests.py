@@ -61,6 +61,15 @@ class TestTokenize(unittest.TestCase):
                     Token(TokenType.RPAREN, None)]
         self.assertEqual(result, expected)
 
+    def test_tokenize_eq(self):
+        result = tokenize("(eq? 2 2)")
+        expected = [Token(TokenType.LPAREN, None),
+                    Token(TokenType.EQ, None),
+                    Token(TokenType.INTEGER, 2),
+                    Token(TokenType.INTEGER, 2),
+                    Token(TokenType.RPAREN, None)]
+        self.assertEqual(result, expected)
+
 
 if __name__ == "__main__":
     unittest.main()
