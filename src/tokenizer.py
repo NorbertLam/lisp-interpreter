@@ -30,8 +30,10 @@ def custom_split(string):
             split_output.append(reversed_input.pop() + reversed_input.pop())
         elif reversed_input[-1].isdigit() or reversed_input[-1].isalpha():
             found_string = ""
-            
+
             while reversed_input[-1].isdigit() or reversed_input[-1].isalpha():
+                found_string += reversed_input.pop()
+            if found_string == "eq":
                 found_string += reversed_input.pop()
             split_output.append(found_string)
 
