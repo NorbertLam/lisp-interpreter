@@ -17,81 +17,70 @@ class Token(object):
 
 
 def custom_split(string):
-    deq = list(string)[::-1]
+    reversed_input = list(string)[::-1]
     symbols = set(['(', ')', '[', ']', '?', '+', '-', '*', '/'])
     split_output = []
 
-    while deq:
-        if deq[-1] in symbols:
-            split_output.append(deq.pop())
-        elif deq[-1] == ' ':
-            deq.pop()
-        else:
-            split = ""
-
-            if deq[-1].isdigit():
-                while deq[-1].isdigit():
-                    split += deq.pop()
-                if split:
-                    split_output.append(split)
-            elif deq[-1] == '#':
-                split_output.append(deq.pop() + deq.pop())
-            else:
-                while deq[-1].isalpha():
-                    split += deq.pop()
-                if split:
-                    split_output.append(split)
+    while reversed_input:
+        if reversed_input[-1] in symbols:
+            split_output.append(reversed_input.pop())
+        elif reversed_input[-1].isspace():
+            reversed_input.pop()
+        elif reversed_input[-1] == '#':
+            split_output.append(reversed_input.pop() + reversed_input.pop())
+        elif reversed_input[-1].isdigit() or reversed_input[-1].isalpha():
+            found_string = ""
+            
+            while reversed_input[-1].isdigit() or reversed_input[-1].isalpha():
+                found_string += reversed_input.pop()
+            split_output.append(found_string)
 
     return split_output
 
 
-def tokenize_split(split):
-    tokens = []
+def tokenize_string(string):
 
-    for s in split:
-        if s == '+':
-            tokens.append(Token(TokenType.PLUS, None))
-        elif s == '-':
-            tokens.append(Token(TokenType.MINUS, None))
-        elif s == '*':
-            tokens.append(Token(TokenType.MULTIPLY, None))
-        elif s == '/':
-            tokens.append(Token(TokenType.DIVIDE, None))
-        elif s == '(':
-            tokens.append(Token(TokenType.LPAREN, None))
-        elif s == ')':
-            tokens.append(Token(TokenType.RPAREN, None))
-        elif s.lower() == "not":
-            tokens.append(Token(TokenType.NOT, None))
-        elif s.lower() == "and":
-            tokens.append(Token(TokenType.AND, None))
-        elif s.lower() == "or":
-            tokens.append(Token(TokenType.OR, None))
-        elif s.lower() == "eq?":
-            tokens.append(Token(TokenType.EQ, None))
-        elif s.lower() == '#t':
-            tokens.append(Token(TokenType.TRUE, True))
-        elif s.lower() == '#f':
-            tokens.append(Token(TokenType.FALSE, False))
-        elif s.lower() == "define":
-            tokens.append(Token(TokenType.DEFINE, None))
-        elif s.lower() == "print":
-            tokens.append(Token(TokenType.PRINT, None))
-        elif s.lower() == "cond":
-            tokens.append(Token(TokenType.COND, None))
-        elif s.lower() == "else":
-            tokens.append(Token(TokenType.ELSE, None))
-        elif s == '[':
-            tokens.append(Token(TokenType.LCOND, None))
-        elif s == ']':
-            tokens.append(Token(TokenType.RCOND, None))
-        elif s.isdigit():
-            tokens.append(Token(TokenType.INTEGER, int(s)))
-        elif s.isalpha():
-            tokens.append(Token(TokenType.NAME, s))
-
-    return tokens
+    if string == '+':
+        return Token(TokenType.PLUS, None)
+    elif string == '-':
+        return Token(TokenType.MINUS, None)
+    elif string == '*':
+        return Token(TokenType.MULTIPLY, None)
+    elif string == '/':
+        return Token(TokenType.DIVIDE, None)
+    elif string == '(':
+        return Token(TokenType.LPAREN, None)
+    elif string == ')':
+        return Token(TokenType.RPAREN, None)
+    elif string == "not":
+        return Token(TokenType.NOT, None)
+    elif string == "and":
+        return Token(TokenType.AND, None)
+    elif string == "or":
+        return Token(TokenType.OR, None)
+    elif string == "eq?":
+        return Token(TokenType.EQ, None)
+    elif string == '#t':
+        return Token(TokenType.TRUE, True)
+    elif string == '#f':
+        return Token(TokenType.FALSE, False)
+    elif string == "define":
+        return Token(TokenType.DEFINE, None)
+    elif string == "print":
+        return Token(TokenType.PRINT, None)
+    elif string == "cond":
+        return Token(TokenType.COND, None)
+    elif string == "else":
+        return Token(TokenType.ELSE, None)
+    elif string == '[':
+        return Token(TokenType.LCOND, None)
+    elif string == ']':
+        return Token(TokenType.RCOND, None)
+    elif string.isdigit():
+        return Token(TokenType.INTEGER, int(string))
+    elif string.isalpha():
+        return Token(TokenType.NAME, string)
 
 
-def tokenize(inpt):
-    return tokenize_split(custom_split(inpt))
+def tokenize(string_input):
+    return [tokenize_string(string) for string in custom_split(string_input)]
