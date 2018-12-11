@@ -1,5 +1,4 @@
 from tokenType import TokenType
-from collections import deque
 
 
 class Token(object):
@@ -18,80 +17,78 @@ class Token(object):
 
 
 def custom_split(string):
-    deq = deque(string)
+    deq = list(string)[::-1]
     symbols = set(['(', ')', '[', ']', '?', '+', '-', '*', '/'])
     split_output = []
 
     while deq:
-        if deq[0] in symbols:
-            split_output.append(deq.popleft())
-        elif deq[0] == ' ':
-            deq.popleft()
+        if deq[-1] in symbols:
+            split_output.append(deq.pop())
+        elif deq[-1] == ' ':
+            deq.pop()
         else:
             split = ""
 
-            if deq[0].isdigit():
-                while deq[0].isdigit():
-                    split += deq.popleft()
+            if deq[-1].isdigit():
+                while deq[-1].isdigit():
+                    split += deq.pop()
                 if split:
                     split_output.append(split)
-            elif deq[0] == '#':
-                split_output.append(deq.popleft() + deq.popleft())
+            elif deq[-1] == '#':
+                split_output.append(deq.pop() + deq.pop())
             else:
-                while deq[0].isalpha():
-                    split += deq.popleft()
+                while deq[-1].isalpha():
+                    split += deq.pop()
                 if split:
                     split_output.append(split)
 
-    return deque(split_output)
+    return split_output
 
 
 def tokenize_split(split):
     tokens = []
 
-    while split:
-        if split[0] == '+':
+    for s in split:
+        if s == '+':
             tokens.append(Token(TokenType.PLUS, None))
-        elif split[0] == '-':
+        elif s == '-':
             tokens.append(Token(TokenType.MINUS, None))
-        elif split[0] == '*':
+        elif s == '*':
             tokens.append(Token(TokenType.MULTIPLY, None))
-        elif split[0] == '/':
+        elif s == '/':
             tokens.append(Token(TokenType.DIVIDE, None))
-        elif split[0] == '(':
+        elif s == '(':
             tokens.append(Token(TokenType.LPAREN, None))
-        elif split[0] == ')':
+        elif s == ')':
             tokens.append(Token(TokenType.RPAREN, None))
-        elif split[0].lower() == "not":
+        elif s.lower() == "not":
             tokens.append(Token(TokenType.NOT, None))
-        elif split[0].lower() == "and":
+        elif s.lower() == "and":
             tokens.append(Token(TokenType.AND, None))
-        elif split[0].lower() == "or":
+        elif s.lower() == "or":
             tokens.append(Token(TokenType.OR, None))
-        elif split[0].lower() == "eq?":
+        elif s.lower() == "eq?":
             tokens.append(Token(TokenType.EQ, None))
-        elif split[0].lower() == '#t':
+        elif s.lower() == '#t':
             tokens.append(Token(TokenType.TRUE, True))
-        elif split[0].lower() == '#f':
+        elif s.lower() == '#f':
             tokens.append(Token(TokenType.FALSE, False))
-        elif split[0].lower() == "define":
+        elif s.lower() == "define":
             tokens.append(Token(TokenType.DEFINE, None))
-        elif split[0].lower() == "print":
+        elif s.lower() == "print":
             tokens.append(Token(TokenType.PRINT, None))
-        elif split[0].lower() == "cond":
+        elif s.lower() == "cond":
             tokens.append(Token(TokenType.COND, None))
-        elif split[0].lower() == "else":
+        elif s.lower() == "else":
             tokens.append(Token(TokenType.ELSE, None))
-        elif split[0] == '[':
+        elif s == '[':
             tokens.append(Token(TokenType.LCOND, None))
-        elif split[0] == ']':
+        elif s == ']':
             tokens.append(Token(TokenType.RCOND, None))
-        elif split[0].isdigit():
-            tokens.append(Token(TokenType.INTEGER, int(split[0])))
-        elif split[0].isalpha():
-            tokens.append(Token(TokenType.NAME, split[0]))
-
-        split.popleft()
+        elif s.isdigit():
+            tokens.append(Token(TokenType.INTEGER, int(s)))
+        elif s.isalpha():
+            tokens.append(Token(TokenType.NAME, s))
 
     return tokens
 
