@@ -1,0 +1,6 @@
+#!/bin/bash
+flake8 booleanTests.py
+flake8 condTests.py
+flake8 defineTests.py
+flake8 mathTests.py
+flake8 tokenizeTests.py
