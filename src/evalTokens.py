@@ -76,8 +76,7 @@ def parse_expr(tokens):
                 elif tokens[0].type == TokenType.RPAREN:
                     rparen_count += 1
                 value.append(tokens.pop(0))
-            '''for v in value:
-                print(v.type, v.value)'''
+
             name_value[name.value] = evaluate_expression(value)
 
         elif curr.type == TokenType.AND:
