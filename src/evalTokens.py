@@ -32,7 +32,7 @@ def evaluate_expression(tokens):
             return curr.value
         elif curr.type == TokenType.NAME:
             return name_value[curr.value]
-        elif curr.type == TokenType.TRUE or TokenType.FALSE:
+        elif curr.type == TokenType.TRUE or curr.type == TokenType.FALSE:
             return curr.value
         else:
             print("LPAREN Error")
