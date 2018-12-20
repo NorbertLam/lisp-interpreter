@@ -56,7 +56,7 @@ class TestTokenize(unittest.TestCase):
         result = tokenize("(define cat 5)")
         expected = [Token(TokenType.LPAREN, None),
                     Token(TokenType.DEFINE, None),
-                    Token(TokenType.NAME, 'cat'),
+                    Token(TokenType.ID, 'cat'),
                     Token(TokenType.INTEGER, 5),
                     Token(TokenType.RPAREN, None)]
         self.assertEqual(result, expected)

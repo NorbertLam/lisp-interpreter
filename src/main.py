@@ -1,6 +1,6 @@
 import sys
 from tokenizer import tokenize
-from evalTokens import evaluate_tokens
+from evaluator import evaluate_tokens
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:

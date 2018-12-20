@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.abspath('../src'))
 from tokenizer import tokenize  # noqa
-from evalTokens import evaluate_tokens  # noqa
+from evaluator import evaluate_multiple_expression  # noqa
 
 
 class TestCond(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestCond(unittest.TestCase):
                        "[(eq? cats birds)(+ cats birds)]"
                        "[(eq? cats dogs)(+ cats dogs)]"
                        "[else 0])")
-        result = evaluate_tokens(exp)
+        result = evaluate_multiple_expression(exp)
         expected = 10
         self.assertEqual(result, expected)
 
@@ -28,7 +28,7 @@ class TestCond(unittest.TestCase):
                        "[(eq? cats birds)(+ cats birds)]"
                        "[(eq? cats dogs)(+ cats dogs)]"
                        "[else 0])")
-        result = evaluate_tokens(exp)
+        result = evaluate_multiple_expression(exp)
         expected = 0
         self.assertEqual(result, expected)
 

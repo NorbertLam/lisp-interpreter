@@ -1,10 +1,10 @@
 from tokenType import TokenType
 
 
-name_value = {}
+expression_for_id = {}
 
 
-def evaluate_tokens(tokens):
+def evaluate_multiple_expression(tokens):
     while tokens:
         output = evaluate_expression(tokens)
 
@@ -15,7 +15,7 @@ def evaluate_expression(tokens):
     curr = tokens.pop(0)
 
     if curr.type == TokenType.LPAREN:
-        expr = parse_expr(tokens)
+        expr = evaluate_operator(tokens)
         nxt = tokens.pop(0)
 
         if nxt.type == TokenType.RPAREN:
@@ -25,8 +25,8 @@ def evaluate_expression(tokens):
             return
     elif curr.type == TokenType.INTEGER:
         return curr.value
-    elif curr.type == TokenType.NAME:
-        return name_value[curr.value]
+    elif curr.type == TokenType.ID:
+        return expression_for_id[curr.value]
     elif curr.type == TokenType.TRUE or curr.type == TokenType.FALSE:
         return curr.value
     else:
@@ -34,7 +34,7 @@ def evaluate_expression(tokens):
         return
 
 
-def parse_expr(tokens):
+def evaluate_operator(tokens):
     curr = tokens.pop(0)
 
     if curr.type == TokenType.PLUS:
@@ -59,7 +59,7 @@ def parse_expr(tokens):
         return exp1 // exp2
     elif curr.type == TokenType.DEFINE:
         name = tokens.pop(0)
-        name_value[name.value] = evaluate_expression(tokens)
+        expression_for_id[name.value] = evaluate_expression(tokens)
     elif curr.type == TokenType.AND:
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
@@ -78,10 +78,10 @@ def parse_expr(tokens):
 
         return exp1 == exp2
     elif curr.type == TokenType.PRINT:
-        exp = parse_expr(tokens)
+        exp = evaluate_operator(tokens)
         print(exp)
 
-        return parse_expr(tokens)
+        return evaluate_operator(tokens)
     elif curr.type == TokenType.COND:
         return evaluate_cond_cases(tokens)
 
@@ -96,7 +96,7 @@ def evaluate_cond_cases(tokens):
             exp.append(tokens.pop(0))
         tokens.pop(0)
 
-        return parse_expr(exp)
+        return evaluate_operator(exp)
 
     evaluation = evaluate_expression(tokens)
     if evaluation:

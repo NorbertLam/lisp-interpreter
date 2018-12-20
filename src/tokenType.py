@@ -16,7 +16,7 @@ class TokenType(Enum):
     TRUE = "TRUE"
     FALSE = "FALSE"
     DEFINE = "DEFINE"
-    NAME = "NAME"
+    ID = "ID"
     PRINT = "PRINT"
     COND = "COND"
     LCOND = "LCOND"

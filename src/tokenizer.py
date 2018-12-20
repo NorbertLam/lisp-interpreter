@@ -81,7 +81,7 @@ def tokenize_string(string):
     elif string.isdigit():
         return Token(TokenType.INTEGER, int(string))
     elif string.isalpha():
-        return Token(TokenType.NAME, string)
+        return Token(TokenType.ID, string)
 
 
 def tokenize(string_input):
