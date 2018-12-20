@@ -5,7 +5,8 @@ name_value = {}
 
 
 def evaluate_tokens(tokens):
-    output = evaluate_expression(tokens)
+    while tokens:
+        output = evaluate_expression(tokens)
 
     return output
 
@@ -15,10 +16,6 @@ def evaluate_expression(tokens):
 
     if curr.type == TokenType.LPAREN:
         expr = parse_expr(tokens)
-
-        if tokens[0].type == TokenType.INTEGER:
-            tokens.pop(0)
-
         nxt = tokens.pop(0)
 
         if nxt.type == TokenType.RPAREN:
@@ -62,20 +59,10 @@ def parse_expr(tokens):
         return exp1 // exp2
     elif curr.type == TokenType.DEFINE:
         name = tokens.pop(0)
-        value = []
-        lparen_count, rparen_count = 1, 0
-
-        while lparen_count != rparen_count:
-            if tokens[0].type == TokenType.LPAREN:
-                lparen_count += 1
-            elif tokens[0].type == TokenType.RPAREN:
-                rparen_count += 1
-            value.append(tokens.pop(0))
-
-        name_value[name.value] = evaluate_expression(value)
+        name_value[name.value] = evaluate_expression(tokens)
     elif curr.type == TokenType.AND:
-        exp1 = parse_expr(tokens)
-        exp2 = parse_expr(tokens)
+        exp1 = evaluate_expression(tokens)
+        exp2 = evaluate_expression(tokens)
 
         return exp1 and exp2
     elif curr.type == TokenType.OR:
