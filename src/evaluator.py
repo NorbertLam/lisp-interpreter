@@ -21,7 +21,7 @@ def evaluate_expression(tokens):
         if nxt.type == TokenType.RPAREN:
             return expr
         else:
-            print("RPAREN Error")
+            print("RPAREN Error", nxt.type)
             return
     elif curr.type == TokenType.INTEGER:
         return curr.value
@@ -30,7 +30,7 @@ def evaluate_expression(tokens):
     elif curr.type == TokenType.TRUE or curr.type == TokenType.FALSE:
         return curr.value
     else:
-        print("LPAREN Error")
+        print("LPAREN Error", curr.type)
         return
 
 
@@ -87,25 +87,25 @@ def evaluate_operator(tokens):
 
 
 def evaluate_cond_cases(tokens):
-    tokens.pop(0)
+    cond_expressions = []
 
-    if tokens[0].type == TokenType.ELSE:
-        exp = []
+    while tokens[0].type == TokenType.LCOND:
+        tokens.pop(0)  # pop [
 
-        while tokens[0].type != TokenType.RCOND:
-            exp.append(tokens.pop(0))
-        tokens.pop(0)
+        if tokens[0].type == TokenType.ELSE:
+            tokens.pop(0)  # pop the ELSE
+            cond_expressions.append((True, evaluate_expression(tokens)))
+            tokens.pop(0)  # pop lingering )
 
-        return evaluate_operator(exp)
+            return get_cond_return_expression(cond_expressions)
+        else:
+            exp1 = evaluate_expression(tokens)
+            exp2 = evaluate_expression(tokens)
+            tokens.pop(0)  # pop ]
+            cond_expressions.append((exp1, exp2))
 
-    evaluation = evaluate_expression(tokens)
-    if evaluation:
-        output = evaluate_expression(tokens)
-        del tokens[:-1]
 
-        return output
-    else:
-        while tokens[0].type != TokenType.LCOND:
-            tokens.pop(0)
-
-        return evaluate_cond_cases(tokens)
+def get_cond_return_expression(cond_cases):
+    for cond, exp in cond_cases:
+        if cond:
+            return exp
