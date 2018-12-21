@@ -2,12 +2,13 @@ from tokenType import TokenType
 
 
 expression_for_id = {}
+cond_expressions = []
 
 
 def evaluate_multiple_expression(tokens):
     while tokens:
         output = evaluate_expression(tokens)
-
+    del cond_expressions[:]
     return output
 
 
@@ -18,10 +19,10 @@ def evaluate_expression(tokens):
         expr = evaluate_operator(tokens)
         nxt = tokens.pop(0)
 
-        if nxt.type == TokenType.RPAREN:
+        if nxt.type == TokenType.RPAREN or nxt.type == TokenType.RCOND:
             return expr
         else:
-            print("RPAREN Error")
+            print("RPAREN Error", nxt.type)
             return
     elif curr.type == TokenType.INTEGER:
         return curr.value
@@ -30,7 +31,7 @@ def evaluate_expression(tokens):
     elif curr.type == TokenType.TRUE or curr.type == TokenType.FALSE:
         return curr.value
     else:
-        print("LPAREN Error")
+        print("LPAREN Error", curr.type)
         return
 
 
@@ -87,25 +88,34 @@ def evaluate_operator(tokens):
 
 
 def evaluate_cond_cases(tokens):
-    tokens.pop(0)
+
+    tokens.pop(0)  # pop [
 
     if tokens[0].type == TokenType.ELSE:
-        exp = []
+        tokens.pop(0)  # pop the ELSE
+        cond = return_true_cond_case(cond_expressions)
+        else_case = evaluate_else_case(tokens)
+        if cond:
+            return cond
+        return else_case
 
-        while tokens[0].type != TokenType.RCOND:
-            exp.append(tokens.pop(0))
-        tokens.pop(0)
+    exp1 = evaluate_expression(tokens)
+    exp2 = evaluate_expression(tokens)
+    tokens.pop(0)  # pop ]
+    cond_expressions.append((exp1, exp2))
 
-        return evaluate_operator(exp)
-
-    evaluation = evaluate_expression(tokens)
-    if evaluation:
-        output = evaluate_expression(tokens)
-        del tokens[:-1]
-
-        return output
-    else:
-        while tokens[0].type != TokenType.LCOND:
-            tokens.pop(0)
-
+    if tokens:
         return evaluate_cond_cases(tokens)
+
+
+def return_true_cond_case(cond_cases):
+    for case in cond_cases:
+        if len(case) == 2 and case[0]:
+            return case[1]
+
+
+def evaluate_else_case(tokens):
+    exp = evaluate_expression(tokens)
+    tokens.pop(0)  # pop lingering )
+
+    return exp
