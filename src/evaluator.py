@@ -2,13 +2,12 @@ from tokenType import TokenType
 
 
 expression_for_id = {}
-cond_expressions = []
 
 
 def evaluate_multiple_expression(tokens):
     while tokens:
         output = evaluate_expression(tokens)
-    del cond_expressions[:]
+
     return output
 
 
@@ -88,34 +87,25 @@ def evaluate_operator(tokens):
 
 
 def evaluate_cond_cases(tokens):
+    cond_expressions = []
 
-    tokens.pop(0)  # pop [
+    while tokens[0].type == TokenType.LCOND:
+        tokens.pop(0)  # pop [
 
-    if tokens[0].type == TokenType.ELSE:
-        tokens.pop(0)  # pop the ELSE
-        cond = return_true_cond_case(cond_expressions)
-        else_case = evaluate_else_case(tokens)
-        if cond:
-            return cond
-        return else_case
+        if tokens[0].type == TokenType.ELSE:
+            tokens.pop(0)  # pop the ELSE
+            cond_expressions.append((True, evaluate_expression(tokens)))
+            tokens.pop(0)  # pop lingering )
 
-    exp1 = evaluate_expression(tokens)
-    exp2 = evaluate_expression(tokens)
-    tokens.pop(0)  # pop ]
-    cond_expressions.append((exp1, exp2))
-
-    if tokens:
-        return evaluate_cond_cases(tokens)
+            return return_true_cond_case(cond_expressions)
+        else:
+            exp1 = evaluate_expression(tokens)
+            exp2 = evaluate_expression(tokens)
+            tokens.pop(0)  # pop ]
+            cond_expressions.append((exp1, exp2))
 
 
 def return_true_cond_case(cond_cases):
     for case in cond_cases:
-        if len(case) == 2 and case[0]:
+        if case[0]:
             return case[1]
-
-
-def evaluate_else_case(tokens):
-    exp = evaluate_expression(tokens)
-    tokens.pop(0)  # pop lingering )
-
-    return exp
