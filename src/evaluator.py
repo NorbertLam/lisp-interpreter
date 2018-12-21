@@ -18,7 +18,7 @@ def evaluate_expression(tokens):
         expr = evaluate_operator(tokens)
         nxt = tokens.pop(0)
 
-        if nxt.type == TokenType.RPAREN or nxt.type == TokenType.RCOND:
+        if nxt.type == TokenType.RPAREN:
             return expr
         else:
             print("RPAREN Error", nxt.type)
@@ -97,7 +97,7 @@ def evaluate_cond_cases(tokens):
             cond_expressions.append((True, evaluate_expression(tokens)))
             tokens.pop(0)  # pop lingering )
 
-            return return_true_cond_case(cond_expressions)
+            return get_cond_return_expression(cond_expressions)
         else:
             exp1 = evaluate_expression(tokens)
             exp2 = evaluate_expression(tokens)
@@ -105,7 +105,7 @@ def evaluate_cond_cases(tokens):
             cond_expressions.append((exp1, exp2))
 
 
-def return_true_cond_case(cond_cases):
-    for case in cond_cases:
-        if case[0]:
-            return case[1]
+def get_cond_return_expression(cond_cases):
+    for cond, exp in cond_cases:
+        if cond:
+            return exp
