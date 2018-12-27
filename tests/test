@@ -1,6 +1,3 @@
 #!/bin/bash
-python booleanTests.py
-python condTests.py
-python defineTests.py
-python mathTests.py
+python evaluatorTests.py
 python tokenizeTests.py
