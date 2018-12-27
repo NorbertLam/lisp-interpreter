@@ -2,8 +2,8 @@ import unittest
 import sys
 import os
 sys.path.append(os.path.abspath('../src'))
-from tokenizer import tokenize, Token  # noqa
-from tokenType import TokenType #noga
+from tokenizer import Token  # noqa
+from tokenType import TokenType  # noga
 from evaluator import evaluate_multiple_expression  # noqa
 
 
