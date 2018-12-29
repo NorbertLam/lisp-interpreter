@@ -1,6 +1,7 @@
+import argparse
+import sys
 from tokenizer import tokenize
 from evaluator import evaluate_multiple_expression
-import argparse
 
 
 parser = argparse.ArgumentParser()
@@ -14,3 +15,6 @@ if args.filename:
             print(evaluate_multiple_expression(tokenize(line)))
 elif args.command:
     print(evaluate_multiple_expression(tokenize(args.command)))
+else:
+    sys.stderr.write("Usage: python main.py exp")
+    sys.exit(1)
