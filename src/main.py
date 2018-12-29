@@ -1,10 +1,18 @@
+import argparse
 import sys
 from tokenizer import tokenize
-from evaluator import evaluate_tokens
+from evaluator import evaluate_multiple_expression
 
-if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        print(evaluate_tokens(tokenize(sys.argv[1])))
-    else:
-        sys.stderr.write("Usage: python main.py exp")
-        sys.exit(1)
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--command')
+parser.add_argument('filename', nargs='?', type=argparse.FileType('r'))
+args = parser.parse_args()
+
+if args.filename:
+    print(evaluate_multiple_expression(tokenize(args.filename.read())))
+elif args.command:
+    print(evaluate_multiple_expression(tokenize(args.command)))
+else:
+    sys.stderr.write("Usage: python main.py exp")
+    sys.exit(1)
