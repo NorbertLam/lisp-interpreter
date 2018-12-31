@@ -1,6 +1,9 @@
 from parseNode import ParseNode
 
 
+definitions = {}
+
+
 class DefineNode(ParseNode):
     def __init__(self, name, expr):
         self.name = name
@@ -8,6 +11,9 @@ class DefineNode(ParseNode):
 
     def __str__(self):
         return "DefineNode(" + str(self.name) + ", " + str(self.expr) + ")"
+
+    def evaluate(self):
+        definitions[self.name] = self.expr.evaluate()
 
 
 class NumberNode(ParseNode):
@@ -17,6 +23,9 @@ class NumberNode(ParseNode):
     def __str__(self):
         return "NumberNode(" + str(self.number) + ")"
 
+    def evaluate(self):
+        return self.number
+
 
 class BooleanNode(ParseNode):
     def __init__(self, boolean):
@@ -25,6 +34,9 @@ class BooleanNode(ParseNode):
     def __str__(self):
         return "BooleanNode(" + str(self.boolean) + ")"
 
+    def evaluate(self):
+        return self.boolean
+
 
 class PrintNode(ParseNode):
     def __init__(self, expr):
@@ -32,6 +44,9 @@ class PrintNode(ParseNode):
 
     def __str__(self):
         return "PrintNode(" + str(self.expr) + ")"
+
+    def evaluate(self):
+        print(self.expr.evaluate())
 
 
 class BinaryFunctionNode(ParseNode):
@@ -43,6 +58,9 @@ class BinaryFunctionNode(ParseNode):
     def __str__(self):
         return "BinaryFunctionNode(" + str(self.expr1) + ", " + str(self.expr2) + ")"
 
+    def evaluate(self):
+        return self.func(self.expr1.evaluate(), self.expr2.evaluate())
+
 
 class UnaryFunctionNode(ParseNode):
     def __init__(self, func, expr):
@@ -51,3 +69,6 @@ class UnaryFunctionNode(ParseNode):
 
     def __str__(self):
         return "UnaryFunctionNode(" + str(self.expr) + ")"
+
+    def evaluate(self):
+        return self.func(self.expr.evaluate())
