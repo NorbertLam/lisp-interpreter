@@ -1,18 +1,4 @@
 from tokenType import TokenType
-from parseNode import ParseNode
-
-
-class DefineNode(ParseNode):
-    def __init__(self):
-        ParseNode.__init__(self)
-        self.define = None
-
-
-class PrintNode(ParseNode):
-    def __init__(self):
-        ParseNode.__init__(self)
-        self.exp1 = None
-        self.exp2 = None
 
 
 expression_for_id = {}
