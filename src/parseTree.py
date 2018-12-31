@@ -10,6 +10,22 @@ class DefineNode(ParseNode):
         return "DefineNode(" + str(self.name) + ", " + str(self.expr) + ")"
 
 
+class NumberNode(ParseNode):
+    def __init__(self, number):
+        self.number = number
+
+    def __str__(self):
+        return "NumberNode(" + str(self.number) + ")"
+
+
+class BooleanNode(ParseNode):
+    def __init__(self, boolean):
+        self.boolean = boolean
+
+    def __str__(self):
+        return "BooleanNode(" + str(self.boolean) + ")"
+
+
 class PrintNode(ParseNode):
     def __init__(self, expr):
         self.expr = expr
