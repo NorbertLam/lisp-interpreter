@@ -1,7 +1,7 @@
 from parseNode import ParseNode
 
 
-definitions = {}
+expression_for_id = {}
 
 
 class DefineNode(ParseNode):
@@ -13,7 +13,7 @@ class DefineNode(ParseNode):
         return "DefineNode(" + str(self.name) + ", " + str(self.expr) + ")"
 
     def evaluate(self):
-        definitions[self.name] = self.expr.evaluate()
+        expression_for_id[self.name] = self.expr.evaluate()
 
 
 class NumberNode(ParseNode):
