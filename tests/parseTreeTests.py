@@ -1,6 +1,7 @@
 import unittest
 import sys
 import os
+import operator
 sys.path.append(os.path.abspath('../src'))
 from parseTree import (
     DefineNode,
@@ -32,23 +33,19 @@ class ParseTreeTests(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_Id_node(self):
-        DefineNode("cat", NumberNode(11)).evaluate()
+        expression_for_id["cat"] = 11
         result = IdNode("cat").evaluate()
         expected = 11
         self.assertEqual(result, expected)
 
     def test_binary_function_node(self):
-        def add(a, b):
-            return a + b
-        result = BinaryFunctionNode(add, NumberNode(4), NumberNode(7)).evaluate()
+        result = BinaryFunctionNode(operator.add, NumberNode(4), NumberNode(7)).evaluate()
         expected = 11
         self.assertEqual(result, expected)
 
     def test_unary_function_node(self):
-        def square(a):
-            return a**2
-        result = UnaryFunctionNode(square, NumberNode(25)).evaluate()
-        expected = 625
+        result = UnaryFunctionNode(operator.abs, NumberNode(-25)).evaluate()
+        expected = 25
         self.assertEqual(result, expected)
 
 
