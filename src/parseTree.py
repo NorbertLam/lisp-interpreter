@@ -38,6 +38,17 @@ class BooleanNode(ParseNode):
         return self.boolean
 
 
+class IdNode(ParseNode):
+    def __init__(self, i_d):
+        self.i_d = i_d
+
+    def __str__(self):
+        return "IdNode(" + str(self.i_d) + ")"
+
+    def evaluate(self):
+        return expression_for_id[self.i_d]
+
+
 class PrintNode(ParseNode):
     def __init__(self, expr):
         self.expr = expr
