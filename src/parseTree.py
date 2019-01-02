@@ -49,6 +49,19 @@ class IdNode(ParseNode):
         return expression_for_id[self.i_d]
 
 
+class CondNode(ParseNode):
+    def __init__(self, cond_expressions):
+        self.cond_expressions = cond_expressions
+
+    def __str__(self):
+        return "CondNode(" + str(self.cond_expressions) + ")"
+
+    def evaluate(self):
+        for cond, expression in self.cond_expressions:
+            if cond.evaluate():
+                return expression.evaluate()
+
+
 class PrintNode(ParseNode):
     def __init__(self, expr):
         self.expr = expr
