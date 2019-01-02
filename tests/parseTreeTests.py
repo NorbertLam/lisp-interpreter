@@ -8,6 +8,7 @@ from parseTree import (
     NumberNode,
     BooleanNode,
     IdNode,
+    CondNode,
     BinaryFunctionNode,
     UnaryFunctionNode,
     expression_for_id
@@ -32,10 +33,19 @@ class ParseTreeTests(unittest.TestCase):
         expected = True
         self.assertEqual(result, expected)
 
-    def test_Id_node(self):
+    def test_id_node(self):
         expression_for_id["cat"] = 11
         result = IdNode("cat").evaluate()
         expected = 11
+        self.assertEqual(result, expected)
+
+    def test_cond_node(self):
+        result = CondNode([
+            (BinaryFunctionNode(operator.eq, NumberNode(4), NumberNode(5)), NumberNode(9)),
+            (BinaryFunctionNode(operator.eq, NumberNode(7523), NumberNode(123)), NumberNode(5)),
+            (BinaryFunctionNode(operator.eq, NumberNode(7), NumberNode(7)), NumberNode(34))
+        ]).evaluate()
+        expected = 34
         self.assertEqual(result, expected)
 
     def test_binary_function_node(self):
