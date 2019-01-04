@@ -126,6 +126,30 @@ class ParserTest(unittest.TestCase):
         ]
         self.assertEqual(result, expected)
 
+    def test_define_nest(self):
+        exp = [
+            Token(TokenType.LPAREN, None),
+            Token(TokenType.DEFINE, None),
+            Token(TokenType.ID, "rat"),
+            Token(TokenType.LPAREN, None),
+            Token(TokenType.PLUS, None),
+            Token(TokenType.INTEGER, 6),
+            Token(TokenType.INTEGER, 11),
+            Token(TokenType.RPAREN, None),
+            Token(TokenType.RPAREN, None),
+            Token(TokenType.LPAREN, None),
+            Token(TokenType.MINUS, None),
+            Token(TokenType.ID, "rat"),
+            Token(TokenType.INTEGER, 4),
+            Token(TokenType.RPAREN, None)
+        ]
+        result = evaluate_multiple_expression(exp)
+        expected = [
+            DefineNode("rat", BinaryFunctionNode(operator.add, NumberNode(6), NumberNode(11))),
+            BinaryFunctionNode(operator.sub, IdNode("rat"), NumberNode(4))
+        ]
+        self.assertEqual(result, expected)
+
     def test_parser_cond_node_basic(self):
         exp = [
             Token(TokenType.LPAREN, None),
