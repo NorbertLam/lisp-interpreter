@@ -12,8 +12,6 @@ from parseTree import (
     expression_for_id
 )
 
-parser_expression_for_id = {}
-
 
 def evaluate_multiple_expression(tokens):
     output = []
@@ -39,7 +37,7 @@ def evaluate_expression(tokens):
     elif curr.type == TokenType.INTEGER:
         return NumberNode(curr.value)
     elif curr.type == TokenType.ID:
-        return IdNode(parser_expression_for_id[curr.value])
+        return IdNode(curr.value)
     elif curr.type == TokenType.TRUE or curr.type == TokenType.FALSE:
         return BooleanNode(curr.value)
     else:
@@ -79,19 +77,19 @@ def evaluate_operator(tokens):
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
 
-        return BooleanNode(exp1 and exp2)
+        return BinaryFunctionNode(operator.and_, exp1, exp2)
     elif curr.type == TokenType.OR:
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
 
-        return BooleanNode(exp1 or exp2)
+        return BinaryFunctionNode(operator.or_, exp1, exp2)
     elif curr.type == TokenType.NOT:
-        return BooleanNode(not evaluate_expression(tokens))
+        return UnaryFunctionNode(operator.not_, evaluate_expression(tokens))
     elif curr.type == TokenType.EQ:
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
 
-        return BooleanNode(exp1 == exp2)
+        return BinaryFunctionNode(operator.eq, exp1, exp2)
     elif curr.type == TokenType.PRINT:
         exp = evaluate_operator(tokens)
 
@@ -110,7 +108,7 @@ def evaluate_cond_cases(tokens):
 
         if tokens[0].type == TokenType.ELSE:
             tokens.pop(0)  # pop the ELSE
-            cond_expressions.append((True, evaluate_expression(tokens)))
+            cond_expressions.append((BooleanNode(True), evaluate_expression(tokens)))
             tokens.pop(0)  # pop lingering )
 
             return cond_expressions
