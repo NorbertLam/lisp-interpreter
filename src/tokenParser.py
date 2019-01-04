@@ -1,12 +1,25 @@
+import operator
 from tokenType import TokenType
+from parseTree import (
+    DefineNode,
+    NumberNode,
+    BooleanNode,
+    IdNode,
+    CondNode,
+    PrintNode,
+    BinaryFunctionNode,
+    UnaryFunctionNode,
+    expression_for_id
+)
 
-
-expression_for_id = {}
+parser_expression_for_id = {}
 
 
 def evaluate_multiple_expression(tokens):
+    output = []
+
     while tokens:
-        output = evaluate_expression(tokens)
+        output.append(evaluate_expression(tokens))
 
     return output
 
@@ -24,11 +37,11 @@ def evaluate_expression(tokens):
             print("RPAREN Error", nxt.type)
             return
     elif curr.type == TokenType.INTEGER:
-        return curr.value
+        return NumberNode(curr.value)
     elif curr.type == TokenType.ID:
-        return expression_for_id[curr.value]
+        return IdNode(parser_expression_for_id[curr.value])
     elif curr.type == TokenType.TRUE or curr.type == TokenType.FALSE:
-        return curr.value
+        return BooleanNode(curr.value)
     else:
         print("LPAREN Error", curr.type)
         return
@@ -41,49 +54,52 @@ def evaluate_operator(tokens):
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
 
-        return exp1 + exp2
+        return BinaryFunctionNode(operator.add, exp1, exp2)
     elif curr.type == TokenType.MINUS:
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
 
-        return exp1 - exp2
+        return BinaryFunctionNode(operator.sub, exp1, exp2)
     elif curr.type == TokenType.MULTIPLY:
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
 
-        return exp1 * exp2
+        return BinaryFunctionNode(operator.mul, exp1, exp2)
     elif curr.type == TokenType.DIVIDE:
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
 
-        return exp1 // exp2
+        return BinaryFunctionNode(operator.truediv, exp1, exp2)
     elif curr.type == TokenType.DEFINE:
         name = tokens.pop(0)
-        expression_for_id[name.value] = evaluate_expression(tokens)
+        exp = evaluate_expression(tokens)
+
+        return DefineNode(name.value, exp)
     elif curr.type == TokenType.AND:
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
 
-        return exp1 and exp2
+        return BooleanNode(exp1 and exp2)
     elif curr.type == TokenType.OR:
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
 
-        return exp1 or exp2
+        return BooleanNode(exp1 or exp2)
     elif curr.type == TokenType.NOT:
-        return not evaluate_expression(tokens)
+        return BooleanNode(not evaluate_expression(tokens))
     elif curr.type == TokenType.EQ:
         exp1 = evaluate_expression(tokens)
         exp2 = evaluate_expression(tokens)
 
-        return exp1 == exp2
+        return BooleanNode(exp1 == exp2)
     elif curr.type == TokenType.PRINT:
         exp = evaluate_operator(tokens)
-        print(exp)
 
-        return evaluate_operator(tokens)
+        return PrintNode(exp)
     elif curr.type == TokenType.COND:
-        return evaluate_cond_cases(tokens)
+        cond_cases = evaluate_cond_cases(tokens)
+
+        return CondNode(cond_cases)
 
 
 def evaluate_cond_cases(tokens):
@@ -97,7 +113,7 @@ def evaluate_cond_cases(tokens):
             cond_expressions.append((True, evaluate_expression(tokens)))
             tokens.pop(0)  # pop lingering )
 
-            return get_cond_return_expression(cond_expressions)
+            return cond_expressions
         else:
             exp1 = evaluate_expression(tokens)
             exp2 = evaluate_expression(tokens)
