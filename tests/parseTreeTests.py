@@ -41,15 +41,26 @@ class ParseTreeTests(unittest.TestCase):
 
     def test_cond_node(self):
         result = CondNode([
-            (BinaryFunctionNode(operator.eq, NumberNode(4), NumberNode(5)), NumberNode(9)),
-            (BinaryFunctionNode(operator.eq, NumberNode(7523), NumberNode(123)), NumberNode(5)),
-            (BinaryFunctionNode(operator.eq, NumberNode(7), NumberNode(7)), NumberNode(34))
+            (BinaryFunctionNode(operator.eq,
+                                NumberNode(4),
+                                NumberNode(5)),
+             NumberNode(9)),
+            (BinaryFunctionNode(operator.eq,
+                                NumberNode(7523),
+                                NumberNode(123)),
+             NumberNode(5)),
+            (BinaryFunctionNode(operator.eq,
+                                NumberNode(7),
+                                NumberNode(7)),
+             NumberNode(34))
         ]).evaluate()
         expected = 34
         self.assertEqual(result, expected)
 
     def test_binary_function_node(self):
-        result = BinaryFunctionNode(operator.add, NumberNode(4), NumberNode(7)).evaluate()
+        result = BinaryFunctionNode(operator.add,
+                                    NumberNode(4),
+                                    NumberNode(7)).evaluate()
         expected = 11
         self.assertEqual(result, expected)
 

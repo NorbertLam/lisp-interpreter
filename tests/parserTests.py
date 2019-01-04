@@ -13,8 +13,7 @@ from parseTree import (
     IdNode,
     CondNode,
     BinaryFunctionNode,
-    UnaryFunctionNode,
-    expression_for_id
+    UnaryFunctionNode
 )
 
 
@@ -60,7 +59,9 @@ class ParserTest(unittest.TestCase):
         ]
         result = evaluate_multiple_expression(exp)
         expected = [
-            BinaryFunctionNode(operator.or_, BooleanNode(True), UnaryFunctionNode(operator.not_, BooleanNode(False)))
+            BinaryFunctionNode(operator.or_, BooleanNode(True),
+                               UnaryFunctionNode(operator.not_,
+                                                 BooleanNode(False)))
         ]
         self.assertEqual(result, expected)
 
@@ -145,8 +146,13 @@ class ParserTest(unittest.TestCase):
         ]
         result = evaluate_multiple_expression(exp)
         expected = [
-            DefineNode("rat", BinaryFunctionNode(operator.add, NumberNode(6), NumberNode(11))),
-            BinaryFunctionNode(operator.sub, IdNode("rat"), NumberNode(4))
+            DefineNode("rat",
+                       BinaryFunctionNode(operator.add,
+                                          NumberNode(6),
+                                          NumberNode(11))),
+            BinaryFunctionNode(operator.sub,
+                               IdNode("rat"),
+                               NumberNode(4))
         ]
         self.assertEqual(result, expected)
 
@@ -205,10 +211,18 @@ class ParserTest(unittest.TestCase):
             DefineNode("dogs", NumberNode(6)),
             DefineNode("birds", NumberNode(5)),
             CondNode([
-                (BinaryFunctionNode(operator.eq, IdNode("cats"), IdNode("birds")),
-                 BinaryFunctionNode(operator.add, IdNode("cats"), IdNode("birds"))),
-                (BinaryFunctionNode(operator.eq, IdNode("cats"), IdNode("dogs")),
-                 BinaryFunctionNode(operator.add, IdNode("cats"), IdNode("dogs"))),
+                (BinaryFunctionNode(operator.eq,
+                                    IdNode("cats"),
+                                    IdNode("birds")),
+                 BinaryFunctionNode(operator.add,
+                                    IdNode("cats"),
+                                    IdNode("birds"))),
+                (BinaryFunctionNode(operator.eq,
+                                    IdNode("cats"),
+                                    IdNode("dogs")),
+                 BinaryFunctionNode(operator.add,
+                                    IdNode("cats"),
+                                    IdNode("dogs"))),
                 (BooleanNode(True), NumberNode(0))
             ])
         ]

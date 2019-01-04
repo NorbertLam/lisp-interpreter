@@ -8,8 +8,7 @@ from parseTree import (
     CondNode,
     PrintNode,
     BinaryFunctionNode,
-    UnaryFunctionNode,
-    expression_for_id
+    UnaryFunctionNode
 )
 
 
@@ -108,7 +107,8 @@ def evaluate_cond_cases(tokens):
 
         if tokens[0].type == TokenType.ELSE:
             tokens.pop(0)  # pop the ELSE
-            cond_expressions.append((BooleanNode(True), evaluate_expression(tokens)))
+            cond_expressions.append((BooleanNode(True),
+                                     evaluate_expression(tokens)))
             tokens.pop(0)  # pop lingering )
 
             return cond_expressions
@@ -117,9 +117,3 @@ def evaluate_cond_cases(tokens):
             exp2 = evaluate_expression(tokens)
             tokens.pop(0)  # pop ]
             cond_expressions.append((exp1, exp2))
-
-
-def get_cond_return_expression(cond_cases):
-    for cond, exp in cond_cases:
-        if cond:
-            return exp
