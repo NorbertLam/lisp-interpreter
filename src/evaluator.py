@@ -1,10 +1,15 @@
 
 
 def evaluate(tree_list):
-    output = None
+    values = []
+
     for tree in tree_list:
-        output = evaluate_tree(tree)
-    return output
+        tree_value = evaluate_tree(tree)
+
+        if tree_value:
+            values.append(tree_value)
+
+    return values
 
 
 def evaluate_tree(tree):
