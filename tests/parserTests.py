@@ -6,6 +6,8 @@ sys.path.append(os.path.abspath('../src'))
 from tokenizer import Token  # noqa
 from tokenType import TokenType  # noga
 from tokenParser import parse_multiple_expression  # noqa
+
+
 from parseTree import (
     DefineNode,
     NumberNode,
