@@ -1,7 +1,7 @@
 import argparse
 import sys
 from tokenizer import tokenize
-from tokenParser import evaluate_multiple_expression
+from tokenParser import parse_multiple_expression
 from evaluator import evaluate
 
 
@@ -11,9 +11,20 @@ parser.add_argument('filename', nargs='?', type=argparse.FileType('r'))
 args = parser.parse_args()
 
 if args.filename:
-    print(evaluate(evaluate_multiple_expression(tokenize(args.filename.read()))))
+    evaluation = evaluate(parse_multiple_expression(
+        tokenize(
+            args.filename.read()
+        )))
+
+    for value in evaluation:
+        print(value)
+
 elif args.command:
-    print(evaluate(evaluate_multiple_expression(tokenize(args.command))))
+    evaluation = evaluate(parse_multiple_expression(tokenize(args.command)))
+
+    for value in evaluation:
+        print(value)
+
 else:
     sys.stderr.write("Usage: python main.py exp")
     sys.exit(1)
