@@ -5,7 +5,9 @@ import operator
 sys.path.append(os.path.abspath('../src'))
 from tokenizer import Token  # noqa
 from tokenType import TokenType  # noga
-from tokenParser import evaluate_multiple_expression  # noqa
+from tokenParser import parse_multiple_expression  # noqa
+
+
 from parseTree import (
     DefineNode,
     NumberNode,
@@ -27,7 +29,7 @@ class ParserTest(unittest.TestCase):
             Token(TokenType.INTEGER, 2),
             Token(TokenType.RPAREN, None)
         ]
-        result = evaluate_multiple_expression(exp)
+        result = parse_multiple_expression(exp)
         expected = [
             BinaryFunctionNode(operator.add, NumberNode(5), NumberNode(2))
         ]
@@ -40,7 +42,7 @@ class ParserTest(unittest.TestCase):
             Token(TokenType.TRUE, True),
             Token(TokenType.RPAREN, None)
         ]
-        result = evaluate_multiple_expression(exp)
+        result = parse_multiple_expression(exp)
         expected = [
             UnaryFunctionNode(operator.not_, BooleanNode(True))
         ]
@@ -57,7 +59,7 @@ class ParserTest(unittest.TestCase):
             Token(TokenType.RPAREN, None),
             Token(TokenType.RPAREN, None)
         ]
-        result = evaluate_multiple_expression(exp)
+        result = parse_multiple_expression(exp)
         expected = [
             BinaryFunctionNode(operator.or_, BooleanNode(True),
                                UnaryFunctionNode(operator.not_,
@@ -85,7 +87,7 @@ class ParserTest(unittest.TestCase):
             Token(TokenType.RPAREN, None),
             Token(TokenType.RPAREN, None)
         ]
-        result = evaluate_multiple_expression(exp)
+        result = parse_multiple_expression(exp)
         expected = [
             BinaryFunctionNode(
                 operator.add,
@@ -120,7 +122,7 @@ class ParserTest(unittest.TestCase):
             Token(TokenType.ID, "cat"),
             Token(TokenType.RPAREN, None)
         ]
-        result = evaluate_multiple_expression(exp)
+        result = parse_multiple_expression(exp)
         expected = [
             DefineNode("cat", NumberNode(5)),
             BinaryFunctionNode(operator.add, IdNode("cat"), IdNode("cat"))
@@ -144,7 +146,7 @@ class ParserTest(unittest.TestCase):
             Token(TokenType.INTEGER, 4),
             Token(TokenType.RPAREN, None)
         ]
-        result = evaluate_multiple_expression(exp)
+        result = parse_multiple_expression(exp)
         expected = [
             DefineNode("rat",
                        BinaryFunctionNode(operator.add,
@@ -205,7 +207,7 @@ class ParserTest(unittest.TestCase):
             Token(TokenType.RCOND, None),
             Token(TokenType.RPAREN, None)
         ]
-        result = evaluate_multiple_expression(exp)
+        result = parse_multiple_expression(exp)
         expected = [
             DefineNode("cats", NumberNode(5)),
             DefineNode("dogs", NumberNode(6)),
