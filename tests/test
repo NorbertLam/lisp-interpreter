@@ -2,3 +2,4 @@
 python tokenizeTests.py
 python parseTreeTests.py
 python parserTests.py
+python evaluatorTests.py
