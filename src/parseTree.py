@@ -1,7 +1,10 @@
-from parseNode import ParseNode
 
 
 expression_for_id = {}
+
+
+class ParseNode(object):
+    pass
 
 
 class DefineNode(ParseNode):

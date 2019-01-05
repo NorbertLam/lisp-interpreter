@@ -1,2 +1,0 @@
-class ParseNode(object):
-    pass
