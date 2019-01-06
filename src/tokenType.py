@@ -22,3 +22,4 @@ class TokenType(Enum):
     LCOND = "LCOND"
     RCOND = "RCOND"
     ELSE = "ELSE"
+    DEFUN = "DEFUN"

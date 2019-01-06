@@ -78,6 +78,8 @@ def tokenize_string(string):
         return Token(TokenType.LCOND, None)
     elif string == ']':
         return Token(TokenType.RCOND, None)
+    elif string =="defun":
+        return Token(TokenType.DEFUN, None)
     elif string.isdigit():
         return Token(TokenType.INTEGER, int(string))
     elif string.isalpha():
